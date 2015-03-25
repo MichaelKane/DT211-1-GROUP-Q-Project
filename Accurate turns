@@ -14,7 +14,7 @@ task main()
 	float circle;
 
 	//variables to store initial values.
-	float d1 = 52.0;// radius of wheel
+	float d1 = 51.0;// radius of wheel
 	float d2 = 102.0;// lenght between both wheels
 	float pie = 3.141592;
 
@@ -35,8 +35,8 @@ task main()
 	nMotorEncoder[motorB] = 0;
 	nMotorEncoder[motorC] = 0;
 
-	nMotorEncoderTarget[motorB] = circle;
-	nMotorEncoderTarget[motorC] = -circle;
+	nMotorEncoderTarget[motorB] = circle *0.75;
+	nMotorEncoderTarget[motorC] = -circle * 0.75;
 
 	motor[motorB] = 20;
 	motor[motorC] = -20;
