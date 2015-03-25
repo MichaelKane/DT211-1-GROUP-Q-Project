@@ -14,8 +14,8 @@ task main()
 	float circle;
 
 	//variables to store initial values.
-	float d1 = 52.0;
-	float d2 = 102.0;
+	float d1 = 52.0;// radius of wheel
+	float d2 = 102.0;// lenght between both wheels
 	float pie = 3.141592;
 
 	//Calculation.
