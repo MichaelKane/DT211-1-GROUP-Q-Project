@@ -19,34 +19,34 @@ task main()
 	float pie = 3.141592;
 
 	//Calculation.
-	c_rotation = (pie * d1);//207
-	c_distance =(pie * d2);//345
+	c_rotation = (pie * d1);
+	c_distance =(pie * d2);
 	temp = (c_distance / c_rotation);
 	circle = (temp * c_distance);
-	
+
 	nxtDisplayCenteredTextLine(0,"%d", circle);
-	
+
 	nSyncedMotors = synchBC;
 	nSyncedTurnRatio = -100;
-	
+
 	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
 	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
-	
+
 	nMotorEncoder[motorB] = 0;
 	nMotorEncoder[motorC] = 0;
-	
+
 	nMotorEncoderTarget[motorB] = circle;
 	nMotorEncoderTarget[motorC] = -circle;
-	
+
 	motor[motorB] = 20;
 	motor[motorC] = -20;
-	
+
 	while(nMotorRunState[motorB] != runStateIdle)
 	{
-		
+
 	}
-	
-	
+
+
 	motor[motorB] = 0;
 	motor[motorC] = 0;
 
