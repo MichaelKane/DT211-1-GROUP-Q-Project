@@ -1,0 +1,158 @@
+#pragma config(Sensor, S1,     LightSensor,    sensorLightActive)
+
+
+void ForwardOneSquare(void);
+void LeftTurn(int circle);
+void RightTurn(int circle);
+
+
+task main()
+{
+
+
+	/* Accurate turns calculation */
+	//variables to store calculation data.
+	float c_rotation;
+	float c_distance;
+	float temp;
+	float circle;
+
+	//variables to store initial values.
+	float d1 = 51.0;// radius of wheel
+	float d2 = 102.0;// lenght between both wheels
+	float pie = 3.141592;
+
+	//Calculation.
+	c_rotation = (pie * d1);
+	c_distance =(pie * d2);
+	temp = (c_distance / c_rotation);
+	circle = (temp * c_distance);
+
+
+
+
+
+
+
+	/* Thresholdvalue */
+	
+	int light; // Variable to hold light value
+	int Dark; // Variable to hold dark value
+	int sum; // Variable to hold sum value
+	int thresholdValue; // Variable to hold threshold value
+
+	light = 65;
+	Dark = 30;
+	sum = light + Dark;
+	thresholdValue = sum/2;
+
+	wait1Msec(1000);
+
+	int r = random(2);
+	while(1 == 1)
+	{
+		if(SensorValue(LightSensor) < thresholdValue)
+		{
+			nxtDisplayCenteredTextLine(4, "Black cell");
+			 
+			
+			if(r == 1)
+			{
+				LeftTurn(circle);
+			}
+			else
+			{
+				RightTurn(circle);
+			}
+		} // End if()
+		else
+		{
+			nxtDisplayCenteredTextLine(4, "white cell");
+			ForwardOneSquare();
+		} // End else()
+
+	} // End while()
+
+}
+
+void ForwardOneSquare() // Forward function
+{
+	int distance_square = 290;// width of the square
+			
+		
+	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
+	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
+		
+	nMotorEncoder[motorB] = 0;
+	nMotorEncoder[motorC] = 0;
+			
+	nMotorEncoderTarget[motorB] = distance_square;
+	nMotorEncoderTarget[motorC] = distance_square;
+			
+	motor[motorB] = 20;
+	motor[motorC] = 20;
+		
+	while(nMotorRunState[motorC] != runStateIdle)
+	{
+		wait1Msec(1000);
+	}
+		
+		
+	motor[motorB] = 0;
+	motor[motorC] = 0;
+		
+
+} // End function
+	
+void LeftTurn(int circle)
+{
+
+
+	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
+	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
+
+	nMotorEncoder[motorB] = 0;
+	nMotorEncoder[motorC] = 0;
+
+	nMotorEncoderTarget[motorB] = circle *0.25;
+	nMotorEncoderTarget[motorC] = -circle * 0.25;
+
+	motor[motorB] = 20;
+	motor[motorC] = -20;
+
+	while(nMotorRunState[motorB] != runStateIdle)
+	{
+
+	}
+
+
+	motor[motorB] = 0;
+	motor[motorC] = 0;
+}
+	
+void RightTurn(int circle)
+{
+	
+	
+
+	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
+	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
+
+	nMotorEncoder[motorB] = 0;
+	nMotorEncoder[motorC] = 0;
+
+	nMotorEncoderTarget[motorB] = -circle *0.25;
+	nMotorEncoderTarget[motorC] = circle * 0.25;
+
+	motor[motorB] = -20;
+	motor[motorC] = 20;
+
+	while(nMotorRunState[motorB] != runStateIdle)
+	{
+
+	}
+
+
+	motor[motorB] = 0;
+	motor[motorC] = 0;
+}
