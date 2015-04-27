@@ -1,16 +1,28 @@
 #pragma config(Sensor, S1,     LightSensor,    sensorLightActive)
 
 
+/* Prototypes */
+
+//Forward movement function.
 void ForwardOneSquare(void);
+
+//Leftturn function.
 void LeftTurn(int circle);
+
+//Rightturn function
 void RightTurn(int circle);
 
 
+/* Main() */
+
+//Main will call the various functions and generate the values required for them.
 task main()
 {
 
+	wait1Msec(1000);
 
 	/* Accurate turns calculation */
+
 	//variables to store calculation data.
 	float c_rotation;
 	float c_distance;
@@ -18,8 +30,14 @@ task main()
 	float circle;
 
 	//variables to store initial values.
-	float d1 = 51.0;// radius of wheel
-	float d2 = 102.0;// lenght between both wheels
+
+	// radius of wheel
+	float d1 = 64.0;
+
+	// lenght between both wheels
+	float d2 = 109.0;
+
+	//Predifined value for pie.
 	float pie = 3.141592;
 
 	//Calculation.
@@ -35,39 +53,62 @@ task main()
 
 
 	/* Thresholdvalue */
-	
-	int light; // Variable to hold light value
-	int Dark; // Variable to hold dark value
-	int sum; // Variable to hold sum value
-	int thresholdValue; // Variable to hold threshold value
+
+	// Variable to hold light value
+	int light;
+
+	// Variable to hold dark value
+	int Dark;
+
+	// Variable to hold sum value
+	int sum;
+
+	// Variable to hold threshold value
+	int thresholdValue;
 
 	light = 65;
 	Dark = 30;
 	sum = light + Dark;
 	thresholdValue = sum/2;
 
+	//Control the speed of each motor.
+	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
+	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
 	wait1Msec(1000);
 
+	//Generate a random number
+	srand(123);
 	int r = random(2);
+
+
 	while(1 == 1)
 	{
+
+		//If the light sensor value is less than threshold it is a black cell. if greater the cell is white.
 		if(SensorValue(LightSensor) < thresholdValue)
 		{
+			//Display black cell onscreen.
 			nxtDisplayCenteredTextLine(4, "Black cell");
-			 
-			
+
+			//If the random number = 1 turn left if 2 turn right.
 			if(r == 1)
 			{
+				//Call left turn function.
 				LeftTurn(circle);
 			}
 			else
 			{
+				//call rightturn function.
 				RightTurn(circle);
 			}
+
 		} // End if()
 		else
 		{
+			//Display white cell onscreen
 			nxtDisplayCenteredTextLine(4, "white cell");
+
+			//Call forward function.
 			ForwardOneSquare();
 		} // End else()
 
@@ -75,84 +116,87 @@ task main()
 
 }
 
-void ForwardOneSquare() // Forward function
+
+/* ForwardOneSquare  */
+
+//Function will move forward one square.
+void ForwardOneSquare()
 {
-	int distance_square = 290;// width of the square
-			
-		
-	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
-	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
-		
+	//Distance of a square.
+	int distance_square = 290;
+
+	//Set Motor encoder to zero.
 	nMotorEncoder[motorB] = 0;
 	nMotorEncoder[motorC] = 0;
-			
+
+	//Set the target to the distance of the square for both motors.
 	nMotorEncoderTarget[motorB] = distance_square;
 	nMotorEncoderTarget[motorC] = distance_square;
-			
+
+	//Set the speed to 20.
 	motor[motorB] = 20;
 	motor[motorC] = 20;
-		
-	while(nMotorRunState[motorC] != runStateIdle)
+
+	//Wait until both motor have completed the distance.
+	while(nMotorRunState[motorB] != runStateIdle)
 	{
-		wait1Msec(1000);
+
 	}
-		
-		
+
+	//set both motors to zero.
 	motor[motorB] = 0;
 	motor[motorC] = 0;
-		
+
 
 } // End function
-	
+
+/* LeftTurn */
+
+//Function will turhn left.
 void LeftTurn(int circle)
 {
 
-
-	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
-	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
-
-	nMotorEncoder[motorB] = 0;
-	nMotorEncoder[motorC] = 0;
-
+	//Set one motors target to the value of circle and the other too the minus value of circle.
 	nMotorEncoderTarget[motorB] = circle *0.25;
 	nMotorEncoderTarget[motorC] = -circle * 0.25;
 
-	motor[motorB] = 20;
-	motor[motorC] = -20;
+	//Set the values of both motors to be oposite each other.
+	motor[motorB] = 40;
+	motor[motorC] = -40;
 
+	//wait until the targets of both motors are reached.
 	while(nMotorRunState[motorB] != runStateIdle)
 	{
 
 	}
 
-
+	//Set the value of both motors to zero.
 	motor[motorB] = 0;
 	motor[motorC] = 0;
+
 }
-	
+
+/* Right turn */
+
+//Function will turn right.
 void RightTurn(int circle)
 {
-	
-	
 
-	nMotorPIDSpeedCtrl[motorB] = mtrSpeedReg;
-	nMotorPIDSpeedCtrl[motorC] = mtrSpeedReg;
-
-	nMotorEncoder[motorB] = 0;
-	nMotorEncoder[motorC] = 0;
-
+	//Set the value of each motor to circle with one minus one plus.
 	nMotorEncoderTarget[motorB] = -circle *0.25;
 	nMotorEncoderTarget[motorC] = circle * 0.25;
 
-	motor[motorB] = -20;
-	motor[motorC] = 20;
+	//set the values of both motors to be opposite each other.
+	motor[motorB] = -40;
+	motor[motorC] = 40;
 
+	//wait until the target has been reached
 	while(nMotorRunState[motorB] != runStateIdle)
 	{
 
 	}
 
-
+	//set each motor to zero.
 	motor[motorB] = 0;
 	motor[motorC] = 0;
 }
